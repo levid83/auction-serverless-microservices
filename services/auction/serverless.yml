@@ -4,7 +4,6 @@ service:
 plugins:
   - serverless-bundle
   - serverless-offline
-  - serverless-pseudo-parameters
 
 provider:
   name: aws
