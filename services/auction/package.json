@@ -11,6 +11,7 @@
   "license": "MIT",
   "devDependencies": {},
   "dependencies": {
+    "http-errors": "^1.8.0",
     "uuid": "^8.3.0"
   }
 }
