@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "redux-devtools-extension": "^2.13.8",
     "serverless-bundle": "^3.1.0",
     "serverless-offline": "^6.8.0"
   },
