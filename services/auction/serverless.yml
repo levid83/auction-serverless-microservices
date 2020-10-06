@@ -1,9 +1,9 @@
-service:
-  name: auction-service
+service: auction-service
+
+frameworkVersion: "2"
 
 plugins:
   - serverless-bundle
-  - serverless-offline
 
 provider:
   name: aws
@@ -11,6 +11,7 @@ provider:
   memorySize: 256
   stage: ${opt:stage, 'dev'}
   region: eu-west-1
+  accountId: 423755863543
   environment:
     AUCTIONS_TABLE_NAME: ${self:custom.AuctionsTable.name}
     MAIL_QUEUE_URL: ${self:custom.MailQueue.url}
@@ -78,7 +79,7 @@ functions:
       - schedule: rate(1 minute)
 
 custom:
-  authorizer: arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:auth-service-${self:provider.stage}-auth
+  authorizer: arn:aws:lambda:${self:provider.region}:${self:provider.accountId}:function:auth-service-${self:provider.stage}-auth
   AuctionsTable:
     name: !Ref AuctionsTable
     arn: !GetAtt AuctionsTable.Arn
@@ -86,6 +87,4 @@ custom:
     arn: ${cf:notification-service-${self:provider.stage}.MailQueueArn}
     url: ${cf:notification-service-${self:provider.stage}.MailQueueUrl}
   AuctionsBucket:
-    name: auctions-bucket-sj19asxm-${self:provider.stage}
-  bundle:
-    linting: false
+    name: auctions-bucket-2t3rt4kxi4-${self:provider.stage}

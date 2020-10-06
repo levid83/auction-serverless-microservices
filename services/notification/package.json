@@ -9,6 +9,10 @@
   "keywords": [],
   "author": "",
   "license": "MIT",
-  "devDependencies": {},
-  "dependencies": {}
+  "devDependencies": {
+    "serverless-bundle": "^3.1.0"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.767.0"
+  }
 }

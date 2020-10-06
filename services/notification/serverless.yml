@@ -4,7 +4,6 @@ frameworkVersion: "2"
 
 plugins:
   - serverless-bundle
-  - serverless-offline
 
 provider:
   name: aws
@@ -34,5 +33,3 @@ custom:
     name: MailQueue-${self:provider.stage}
     arn: !GetAtt MailQueue.Arn
     url: !Ref MailQueue
-  bundle:
-    linting: false

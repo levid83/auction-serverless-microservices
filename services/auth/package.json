@@ -11,5 +11,8 @@
   "license": "MIT",
   "dependencies": {
     "jsonwebtoken": "^8.5.1"
+  },
+  "devDependencies": {
+    "serverless-bundle": "^3.1.0"
   }
 }
