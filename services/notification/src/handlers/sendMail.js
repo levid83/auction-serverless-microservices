@@ -2,13 +2,9 @@ import AWS from "aws-sdk";
 
 const ses = new AWS.SES({ region: process.env.AWS_REGION_ID });
 
-async function sendMail(event, context) {
-  const record = event.Records[0];
-
-  const email = JSON.parse(record.body);
-  const { subject, body, recipient } = email;
-
-  const params = {
+function buildEmail(emailParams) {
+  const { subject, body, recipient } = emailParams;
+  return {
     Source: process.env.SENDER_EMAIL,
     Destination: {
       ToAddresses: [recipient],
@@ -24,11 +20,13 @@ async function sendMail(event, context) {
       },
     },
   };
+}
 
+async function sendMail(event, _) {
+  const params = JSON.parse(event.Records[0].body);
+  const email = buildEmail(params);
   try {
-    const result = await ses.sendEmail(params).promise();
-    console.log(result);
-    return result;
+    return ses.sendEmail(email).promise();
   } catch (error) {
     console.error(error);
   }
