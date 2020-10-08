@@ -4,12 +4,13 @@ frameworkVersion: "2"
 
 plugins:
   - serverless-bundle
+  - serverless-dotenv-plugin
 
 provider:
   name: aws
   runtime: nodejs12.x
   memorySize: 128
-  region: eu-west-1
+  region: ${env:AWS_REGION_ID}
   environment:
     AUTH0_PUBLIC_KEY: ${file(secret.pem)}
 
@@ -55,3 +56,10 @@ resources:
         RestApiId:
           Ref: "ApiGatewayRestApi"
         StatusCode: "401"
+
+custom:
+  dotenv:
+    path: ../../.env
+    logging: false
+    include:
+      - AWS_REGION_ID

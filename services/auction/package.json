@@ -10,7 +10,8 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "serverless-bundle": "^3.1.0"
+    "serverless-bundle": "^3.1.0",
+    "serverless-dotenv-plugin": "^3.0.0"
   },
   "dependencies": {
     "@middy/core": "^1.0.0-beta.11",

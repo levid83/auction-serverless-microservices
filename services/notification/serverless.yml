@@ -4,12 +4,13 @@ frameworkVersion: "2"
 
 plugins:
   - serverless-bundle
+  - serverless-dotenv-plugin
 
 provider:
   name: aws
   runtime: nodejs12.x
   memorySize: 256
-  region: eu-west-1
+  region: ${env:AWS_REGION_ID}
   stage: ${opt:stage, 'dev'}
   iamRoleStatements:
     - ${file(iam/SendMailIAM.yml):SendMailIAM}
@@ -29,6 +30,12 @@ functions:
           arn: ${self:custom.mailQueue.arn}
           batchSize: 1
 custom:
+  dotenv:
+    path: ../../.env
+    logging: false
+    include:
+      - AWS_REGION_ID
+      - SENDER_EMAIL
   mailQueue:
     name: MailQueue-${self:provider.stage}
     arn: !GetAtt MailQueue.Arn
