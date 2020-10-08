@@ -1,34 +1,26 @@
 import AWS from "aws-sdk";
-import commonMiddleware from "../lib/commonMiddleware";
+import AuctionRepository from "../lib/repositories/AuctionRepository";
+import commonMiddleware from "../lib/middlewares/commonMiddleware";
 import createError from "http-errors";
 
-const dynamodb = new AWS.DynamoDB.DocumentClient();
+const auctionRepository = new AuctionRepository(
+  new AWS.DynamoDB.DocumentClient()
+);
 
 export async function getAuctionById(id) {
-  let auction;
-
   try {
-    const result = await dynamodb
-      .get({
-        TableName: process.env.AUCTIONS_TABLE_NAME,
-        Key: { id },
-      })
-      .promise();
-
-    auction = result.Item;
+    const auction = await auctionRepository.getAuctionById(id);
+    if (!auction) {
+      throw new createError.NotFound(`Auction with ID "${id}" not found!`);
+    }
+    return auction;
   } catch (error) {
     console.error(error);
     throw new createError.InternalServerError(error);
   }
-
-  if (!auction) {
-    throw new createError.NotFound(`Auction with ID "${id}" not found!`);
-  }
-
-  return auction;
 }
 
-async function getAuction(event, context) {
+async function getAuction(event, _) {
   const { id } = event.pathParameters;
   const auction = await getAuctionById(id);
 

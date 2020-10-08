@@ -2,25 +2,22 @@ import AWS from "aws-sdk";
 import createError from "http-errors";
 import validator from "@middy/validator";
 import { getAuctionById } from "./getAuction";
-import commonMiddleware from "../lib/commonMiddleware";
+import AuctionRepository from "../lib/repositories/AuctionRepository";
+import commonMiddleware from "../lib/middlewares/commonMiddleware";
 import placeBidSchema from "../lib/schemas/placeBidSchema";
 
-const dynamodb = new AWS.DynamoDB.DocumentClient();
+const auctionRepository = new AuctionRepository(
+  new AWS.DynamoDB.DocumentClient()
+);
 
-async function placeBid(event, context) {
-  const { id } = event.pathParameters;
-  const { amount } = event.body;
-  const { email } = event.requestContext.authorizer;
-
-  const auction = await getAuctionById(id);
-
+function verifyBid(auction, bid) {
   // Bid identity validation
-  if (email === auction.seller) {
+  if (bid.email === auction.seller) {
     throw new createError.Forbidden(`You cannot bid on your own auctions!`);
   }
 
   // Avoid double bidding
-  if (email === auction.highestBid.bidder) {
+  if (bid.email === auction.highestBid.bidder) {
     throw new createError.Forbidden(`You are already the highest bidder`);
   }
 
@@ -30,38 +27,32 @@ async function placeBid(event, context) {
   }
 
   // Bid amount validation
-  if (amount <= auction.highestBid.amount) {
+  if (bid.amount <= auction.highestBid.amount) {
     throw new createError.Forbidden(
       `Your bid must be higher than ${auction.highestBid.amount}!`
     );
   }
+}
 
-  const params = {
-    TableName: process.env.AUCTIONS_TABLE_NAME,
-    Key: { id },
-    UpdateExpression:
-      "set highestBid.amount = :amount, highestBid.bidder = :bidder",
-    ExpressionAttributeValues: {
-      ":amount": amount,
-      ":bidder": email,
-    },
-    ReturnValues: "ALL_NEW",
+async function placeBid(event, _) {
+  const bid = {
+    id: event.pathParameters,
+    amount: event.body,
+    email: event.requestContext.authorizer,
   };
 
-  let updatedAuction;
-
   try {
-    const result = await dynamodb.update(params).promise();
-    updatedAuction = result.Attributes;
+    const auction = await getAuctionById(bid.id);
+    verifyBid(auction, bid);
+    const updatedAuction = await auctionRepository.updateHighestBid(bid);
+    return {
+      statusCode: 200,
+      body: JSON.stringify(updatedAuction),
+    };
   } catch (error) {
     console.error(error);
     throw new createError.InternalServerError(error);
   }
-
-  return {
-    statusCode: 200,
-    body: JSON.stringify(updatedAuction),
-  };
 }
 
 export const handler = commonMiddleware(placeBid).use(

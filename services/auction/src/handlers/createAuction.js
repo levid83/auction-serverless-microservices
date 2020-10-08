@@ -2,7 +2,7 @@ import AWS from "aws-sdk";
 import createError from "http-errors";
 import validator from "@middy/validator";
 import AuctionRepository from "../lib/repositories/AuctionRepository";
-import commonMiddleware from "../lib/commonMiddleware";
+import commonMiddleware from "../lib/middlewares/commonMiddleware";
 import createAuctionSchema from "../lib/schemas/createAuctionSchema";
 
 const auctionRepository = new AuctionRepository(
