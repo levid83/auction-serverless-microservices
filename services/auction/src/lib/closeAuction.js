@@ -26,9 +26,9 @@ export async function closeAuction(auction) {
       .sendMessage({
         QueueUrl: process.env.MAIL_QUEUE_URL,
         MessageBody: JSON.stringify({
-          subject: "No bids on your auction item :(",
+          subject: "No bids on your auction item",
           recipient: seller,
-          body: `Oh no! Your item "${title}" didn't get any bids. Better luck next time!`,
+          body: `Sorry! Your item "${title}" didn't get any bids. Better luck next time!`,
         }),
       })
       .promise();
@@ -41,7 +41,7 @@ export async function closeAuction(auction) {
       MessageBody: JSON.stringify({
         subject: "Your item has been sold!",
         recipient: seller,
-        body: `Woohoo! Your itme "${title}" has been sold for $${amount}.`,
+        body: `Woohoo! Your item "${title}" has been sold for $${amount}.`,
       }),
     })
     .promise();
@@ -52,7 +52,7 @@ export async function closeAuction(auction) {
       MessageBody: JSON.stringify({
         subject: "You won an auction!",
         recipient: bidder,
-        body: `What a great deal! You got yourself a "${title}" for $${amount}.`,
+        body: `What a great deal! You bought a "${title}" for $${amount}.`,
       }),
     })
     .promise();
