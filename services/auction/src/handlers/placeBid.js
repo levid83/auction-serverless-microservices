@@ -40,13 +40,18 @@ async function placeBid(event, _) {
     amount: event.body.amount,
     email: event.requestContext.authorizer.email,
   };
-
+  let auction;
   try {
-    const auction = await getAuctionById(bid.id);
-    verifyBid(auction, bid);
+    auction = await getAuctionById(bid.id);
+  } catch (error) {
+    console.error(error);
+    throw new createError.NotFound(error);
+  }
+  verifyBid(auction, bid);
+  try {
     const updatedAuction = await auctionRepository.updateHighestBid(bid);
     return {
-      statusCode: 200,
+      statusCode: 201,
       body: JSON.stringify(updatedAuction),
     };
   } catch (error) {
