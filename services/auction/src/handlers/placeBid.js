@@ -36,9 +36,9 @@ function verifyBid(auction, bid) {
 
 async function placeBid(event, _) {
   const bid = {
-    id: event.pathParameters,
-    amount: event.body,
-    email: event.requestContext.authorizer,
+    id: event.pathParameters.id,
+    amount: event.body.amount,
+    email: event.requestContext.authorizer.email,
   };
 
   try {
