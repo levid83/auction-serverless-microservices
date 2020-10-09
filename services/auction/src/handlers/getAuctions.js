@@ -12,7 +12,7 @@ const auctionRepository = new AuctionRepository(
 async function getAuctions(event, _) {
   const { status } = event.queryStringParameters;
   try {
-    const auctions = auctionRepository.getAuctionsByStatus(status);
+    const auctions = await auctionRepository.getAuctionsByStatus(status);
     return {
       statusCode: 200,
       body: JSON.stringify(auctions),
