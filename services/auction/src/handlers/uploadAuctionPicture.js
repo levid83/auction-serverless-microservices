@@ -13,13 +13,15 @@ const auctionRepository = new AuctionRepository(
   new AWS.DynamoDB.DocumentClient()
 );
 
-const storageService = new StorageService(new AWS.S3());
+const storageService = new StorageService(
+  new AWS.S3(),
+  process.env.AUCTIONS_BUCKET_NAME
+);
 
 export async function uploadAuctionPicture(event) {
   const { id } = event.pathParameters;
   const { email } = event.requestContext.authorizer;
-  const { image } = event.body;
-
+  const image = event.body;
   try {
     const auction = await getAuctionById(id);
 
