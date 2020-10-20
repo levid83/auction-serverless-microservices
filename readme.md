@@ -2,18 +2,18 @@
 
 ### Services
 
-- Auth service - an Auth0 based Lambda Authorizer used to protect API endpoints for authorized users
-- Auction service - a simple auction marketplace using DynamoDB as database, SQS as a notification queue and S3 as an image storage
-- Notification service - sends out emails on auction events by consuming the SQS notification queue and using SES email service
+- **Auth service** - an **Auth0 based Lambda Authorizer** used to protect API endpoints for authorized users
+- **Auction service** - a simple auction marketplace using **DynamoDB** as database, **SQS** as a notification queue and **S3** as an image storage
+- **Notification service** - sends out emails on auction events by consuming the **SQS** notification queue and using **SES** email service
 
 ### Global settings
 
-1. To deploy your application in the cloud you need an AWS account.
+1. To deploy your application in the cloud you need an **AWS account**.
 2. Also you need to install and configure [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html) and [serverless CLI](https://www.serverless.com/framework/docs/getting-started/)
 3. Create a `.env` file in the root folder (see [.env.example](.env.example)). You need to specify 3 variables:
-   - `AWS_ACCOUNT_ID`: your AWS Account Id without dashes
-   - `AWS_REGION_ID`: AWS datacenter location id (for example eu-west-1)
-   - `SENDER_EMAIL`: a valid email address from where the auction notifications will be sent (should be validated in AWS SES )
+   - `AWS_ACCOUNT_ID`: your **AWS Account Id** without dashes
+   - `AWS_REGION_ID`: **AWS datacenter location id** (for example eu-west-1)
+   - `SENDER_EMAIL`: a **valid email address** from where the auction notifications will be sent (should be validated in **AWS SES** )
 
 ### Auth service
 
