@@ -93,4 +93,4 @@ custom:
     arn: ${cf:notification-service-${self:provider.stage}.MailQueueArn}
     url: ${cf:notification-service-${self:provider.stage}.MailQueueUrl}
   AuctionsBucket:
-    name: auctions-bucket-2t3rt${env:AWS_ACCOUNT_ID}4kxi4-${self:provider.stage}
+    name: auctions-bucket-2t3rtc${env:AWS_ACCOUNT_ID}4kxi4-${self:provider.stage}
